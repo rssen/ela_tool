@@ -1,0 +1,77 @@
+#!/usr/bin/python3
+"""
+This module implements the CLI for the JPEG encoder and decoder.
+
+:author: Robin Senn, Quinten Stampa
+"""
+import argparse
+import sys
+from bin import jpeg_main
+from pathlib import Path
+
+
+def range_limited_float_type(arg):
+    try:
+        f = float(arg)
+    except ValueError:
+        raise argparse.ArgumentTypeError("Must be a floating point number")
+    if f <= 0:
+        raise argparse.ArgumentTypeError("Argument must be > 0")
+    return f
+
+
+def range_limited_int_type(arg):
+    try:
+        i = int(arg)
+    except ValueError:
+        raise argparse.ArgumentTypeError("Must be a integer")
+    if i <= 0 or i >= 100:
+        raise argparse.ArgumentTypeError("Argument must be between 0 and 100")
+    return i
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="JPEG encoder and decoder")
+    parser.add_argument("-f", "--file", type=Path, help="path to the image", required=True)
+    parser.add_argument(
+        "-o",
+        "--output",
+        action="store_true",
+        help="write intermediate results to files",
+        default=False,
+    )
+    parser.add_argument(
+        "-s",
+        "--slow",
+        action="store_true",
+        help="use slow dct calculation (1:1 application of the formula from the lecture notes)",
+        default=False,
+    )
+    parser.add_argument(
+        "-q", "--quality",
+        type=range_limited_int_type,
+        help="quality value between 0 and 100",
+    )
+    parser.add_argument(
+        "-e",
+        "--ela",
+        action="store_true",
+        help="perform ELA with ELA image as output",
+        default=False,
+    )
+    parser.add_argument(
+        "-m",
+        "--multiplier",
+        type=range_limited_float_type,
+        help="multiplier m > 0",
+        default=1,
+    )
+    args = parser.parse_args(sys.argv[1:])
+    jpeg_main.main(
+        image_path=args.file,
+        quality=args.quality,
+        output=args.output,
+        dct_slow=args.slow,
+        ela=args.ela,
+        ela_multiplier=args.multiplier
+    )
