@@ -47,10 +47,9 @@ Project Structure
    :template: custom_module.rst
    :recursive:
 
-
-
-   bin
    src
+   bin
+
 
 Indices and tables
 ==================

@@ -10,6 +10,9 @@ setup(
     python_requires=">=3.9",
     install_requires=["numpy == 1.20.3", "Pillow == 8.2.0", "Cython == 0.29.23", "blessings==1.7"],
     scripts=["bin/jpeg-cli"],
+    extras_require={
+        "docs": ["sphinx==4.5.0", "furo==2022.4.7"]
+    },
     ext_modules=cythonize(
         Extension(
             "color_space_transform",
